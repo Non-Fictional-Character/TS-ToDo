@@ -9,14 +9,14 @@ const fs = require('fs');
 //const todos: string[] = ['create todo list', 'fill todo list', 'develop an app'];
 
 const todos: string[] = fs.readFileSync('C:/Users/Robert/projects/TS-todo/todoSavings.txt','utf8').split(',');
-
+if (todos){todos} else {todos.pop}  
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // req -> request
 // res -> response
 app.get('/', (req, res) => 
-  res.render('index', { 
+res.render('index', { 
     title: 'Hey', 
     message: 'Hello there!',
     todos: todos
@@ -25,7 +25,12 @@ app.get('/', (req, res) =>
 
 app.post('/', (req, res) => {
   console.log(req.body);
-  todos.push(req.body.todoadder);
+  if (req.body.todoadder){
+    todos.push(req.body.todoadder);
+  }
+  if(req.body.todoRemover){
+    todos.splice((req.body.todoRemover - 1), 1);
+  }
   fs.writeFile("todoSavings.txt", todos.toString(), function(err) {
     if(err) {
       return console.log(err);
